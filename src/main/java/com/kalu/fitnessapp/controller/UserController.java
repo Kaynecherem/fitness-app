@@ -14,6 +14,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private static final String USER_ERROR_MESSAGE = "User not found";
+
     // User registration
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
@@ -26,7 +28,7 @@ public class UserController {
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         String username = authentication.getName();
         User user = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_ERROR_MESSAGE));
         return ResponseEntity.ok(user);
     }
 
@@ -37,7 +39,7 @@ public class UserController {
             Authentication authentication) {
         String username = authentication.getName();
         User existingUser = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_ERROR_MESSAGE));
 
         // Update user details (excluding password and roles for simplicity)
         existingUser.setUsername(updateuser.getUsername());
@@ -48,10 +50,10 @@ public class UserController {
 
     // Delete authenticated user's account
     @DeleteMapping("/me")
-    public ResponseEntity <Void> deleteUser(Authentication authentication) {
+    public ResponseEntity<Void> deleteUser(Authentication authentication) {
         String username = authentication.getName();
         User user = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_ERROR_MESSAGE));
 
         userService.deleteUser(user.getId());
         return ResponseEntity.noContent().build();
