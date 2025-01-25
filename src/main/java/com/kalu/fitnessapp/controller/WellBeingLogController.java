@@ -4,22 +4,24 @@ import com.kalu.fitnessapp.entity.User;
 import com.kalu.fitnessapp.entity.WellBeingLog;
 import com.kalu.fitnessapp.service.UserService;
 import com.kalu.fitnessapp.service.WellBeingLogService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/logs")
+@PreAuthorize("hasAnyAuthority('STUDENT')")
 public class WellBeingLogController {
 
-    @Autowired
-    private WellBeingLogService logService;
-
-    @Autowired
-    private UserService userService;
+    private final WellBeingLogService logService;
+    private final UserService userService;
 
     private static final String LOG_NOT_FOUND = "Log not found";
 
@@ -35,7 +37,14 @@ public class WellBeingLogController {
         User user = getAuthenticatedUser(authentication);
         log.setUser(user);
         WellBeingLog newLog = logService.createLog(log);
-        return ResponseEntity.ok(newLog);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newLog.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(newLog);
     }
 
     // Get logs for the authenticated user
@@ -71,7 +80,7 @@ public class WellBeingLogController {
 
     //Delete an existing log
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLog(
+    public ResponseEntity<String> deleteLog(
             @PathVariable Long id,
             Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
@@ -84,7 +93,7 @@ public class WellBeingLogController {
             return ResponseEntity.status(403).build();
         }
 
-        logService.deleteLog(id);
-        return ResponseEntity.noContent().build();
+        String res = logService.deleteLog(id);
+        return ResponseEntity.ok(res);
     }
 }

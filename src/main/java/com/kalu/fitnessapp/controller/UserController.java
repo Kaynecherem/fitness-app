@@ -1,30 +1,54 @@
 package com.kalu.fitnessapp.controller;
 
 import com.kalu.fitnessapp.entity.User;
+import com.kalu.fitnessapp.service.AuthService;
 import com.kalu.fitnessapp.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.util.Map;
+
+
+@Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final AuthService authService;
+    private final UserService userService;
 
     private static final String USER_ERROR_MESSAGE = "User not found";
+
+    @PostMapping("/auth")
+    public ResponseEntity<Map<String, String>> authenticateUser(@RequestBody User user, HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok(authService.authenticateUser(user, httpServletRequest));
+    }
 
     // User registration
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         User newUser = userService.registerUser(user);
-        return ResponseEntity.ok(newUser);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .replacePath("/api/users/{id}")
+                .buildAndExpand(newUser.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(newUser);
     }
 
     // Get authenticated user's details
     @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'STUDENT')")
     public ResponseEntity<User> getCurrentUser(Authentication authentication) {
         String username = authentication.getName();
         User user = userService.findByUsername(username)
@@ -34,6 +58,7 @@ public class UserController {
 
     // Update authenticated user's details
     @PutMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'STUDENT')")
     public ResponseEntity<User> updateUser(
             @RequestBody User updateuser,
             Authentication authentication) {
@@ -50,12 +75,14 @@ public class UserController {
 
     // Delete authenticated user's account
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteUser(Authentication authentication) {
-        String username = authentication.getName();
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'STUDENT')")
+    public ResponseEntity<String> deleteUser(Authentication authentication) {
+
+        String username = authentication.getName(); //Email
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException(USER_ERROR_MESSAGE));
 
-        userService.deleteUser(user.getId());
-        return ResponseEntity.noContent().build();
+        String res = userService.deleteUser(user);
+        return ResponseEntity.ok(res);
     }
 }

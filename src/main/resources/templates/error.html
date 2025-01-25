@@ -1,0 +1,48 @@
+<!-- src/main/resources/templates/error.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Error Page</title>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .error-container {
+            background: #f8d7da;
+            padding: 1.5em;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .error-container h1 {
+            margin-top: 0;
+        }
+        .error-details {
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<!--Language Selector-->
+<a href="?lang=en">English</a> |
+<a href="?lang=hr">Croatian</a> |
+<a href="?lang=cn">Chinese</a>
+
+
+<div class="error-container">
+    <h1>Oops! Something went wrong.</h1>
+    <p>We’re sorry, but we encountered an unexpected error. Please try again or contact support if the issue persists.</p>
+
+    <!-- Optional: Display additional error details if needed -->
+    <div class="error-details">
+        <p><strong>Status:</strong> <span th:text="${status}"></span></p>
+        <p><strong>Error:</strong> <span th:text="${error}"></span></p>
+        <p><strong th:text="#{errorMessage.key}"></strong> <span th:text="${message}"></span></p>
+        <p><strong>Path:</strong> <span th:text="${path}"></span></p>
+    </div>
+</div>
+</body>
+</html>

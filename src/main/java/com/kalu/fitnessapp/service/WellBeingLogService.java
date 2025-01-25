@@ -1,19 +1,21 @@
 package com.kalu.fitnessapp.service;
 
+import com.kalu.fitnessapp.UserDeletedEvent;
 import com.kalu.fitnessapp.entity.User;
 import com.kalu.fitnessapp.entity.WellBeingLog;
 import com.kalu.fitnessapp.repository.WellBeingLogRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class WellBeingLogService {
 
-    @Autowired
-    private WellBeingLogRepository logRepository;
+    private final WellBeingLogRepository logRepository;
 
     public WellBeingLog createLog(WellBeingLog log) {
         return logRepository.save(log);
@@ -33,6 +35,11 @@ public class WellBeingLogService {
 
     public String deleteLog(Long id) {
         logRepository.deleteById(id);
-        return "Wellbeing Log is removed: "+id;
+        return "Wellbeing Log is removed: " + id;
+    }
+
+    @TransactionalEventListener
+    public void userDeletionListener(UserDeletedEvent userDeletedEvent) {
+        logRepository.deleteByUser(userDeletedEvent.user());
     }
 }
