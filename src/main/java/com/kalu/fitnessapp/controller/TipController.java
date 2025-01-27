@@ -5,7 +5,6 @@ import com.kalu.fitnessapp.service.TipService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class TipController {
     // Create a new tip (Assuming only admin can create tips)
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Tip> createTip(@RequestBody Tip tip, Authentication authentication) {
+    public ResponseEntity<Tip> createTip(@RequestBody Tip tip) {
         // Optionally, check if the user has admin privileges
         // For simplicity, assuming all authenticated users can create tips
         Tip newTip = tipService.createTip(tip);

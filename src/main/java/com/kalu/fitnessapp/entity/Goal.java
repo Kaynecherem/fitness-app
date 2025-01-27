@@ -1,5 +1,6 @@
 package com.kalu.fitnessapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class Goal {
 
     private String goalType;
     private String description;
+    @JsonFormat(pattern = "dd-MM-yyy")
     private LocalDate targetDate;
     private boolean isAchieved;
 

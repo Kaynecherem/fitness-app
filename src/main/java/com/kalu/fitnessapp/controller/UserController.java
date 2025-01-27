@@ -67,7 +67,8 @@ public class UserController {
                 .orElseThrow(() -> new RuntimeException(USER_ERROR_MESSAGE));
 
         // Update user details (excluding password and roles for simplicity)
-        existingUser.setUsername(updateuser.getUsername());
+        existingUser.setFirstname(updateuser.getFirstname());
+        existingUser.setLastname(updateuser.getLastname());
 
         User savedUser = userService.updateUser(existingUser);
         return ResponseEntity.ok(savedUser);

@@ -38,7 +38,7 @@ public class GoalController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
+                .replacePath("/api/goals/{id}")
                 .buildAndExpand(newGoal.getId())
                 .toUri();
 

@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(Customizer.withDefaults())
-                .authorizeHttpRequests(customizer -> customizer.requestMatchers("/api/users/register", "/api/users/auth")
+                .authorizeHttpRequests(customizer -> customizer.requestMatchers("/api/users/register", "/api/users/auth", "/error")
                         .permitAll().anyRequest().authenticated())
                 .addFilterBefore(new JwtFilterChain(jwtProvider, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .build();
