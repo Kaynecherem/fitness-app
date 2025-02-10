@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users - Fitness App</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<header>
+    <h1>Fitness App</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/goals}">Goals</a></li>
+            <li><a th:href="@{/users}">Users</a></li>
+            <li><a th:href="@{/logs}">Well‑being Logs</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2>Users</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.username}">johndoe</td>
+            <td th:text="${user.firstname}">John</td>
+            <td th:text="${user.lastname}">Doe</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer>
+    <p>&copy; 2025 Fitness App</p>
+</footer>
+</body>
+</html>

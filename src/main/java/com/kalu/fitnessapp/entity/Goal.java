@@ -21,7 +21,7 @@ public class Goal {
 
     private String goalType;
     private String description;
-    @JsonFormat(pattern = "dd-MM-yyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate targetDate;
     private boolean isAchieved;
 

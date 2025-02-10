@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Goals - Fitness App</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<header>
+    <h1>Fitness App</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/goals}">Goals</a></li>
+            <li><a th:href="@{/users}">Users</a></li>
+            <li><a th:href="@{/logs}">Well‑being Logs</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2>Goals</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Goal Type</th>
+            <th>Description</th>
+            <th>Target Date</th>
+            <th>Achieved</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="goal : ${goals}">
+            <td th:text="${goal.id}">1</td>
+            <td th:text="${goal.goalType}">Lose Weight</td>
+            <td th:text="${goal.description}">Lose 5kg</td>
+            <td th:text="${goal.targetDate}">2025-03-01</td>
+            <td th:text="${goal.achieved}">false</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/goals/new}">Create New Goal</a>
+</main>
+
+<footer>
+    <p>&copy; 2025 Fitness App</p>
+</footer>
+</body>
+</html>

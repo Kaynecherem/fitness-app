@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -36,6 +37,7 @@ public class WellBeingLogController {
     public ResponseEntity<WellBeingLog> createLog(@RequestBody WellBeingLog log, Authentication authentication) {
         User user = getAuthenticatedUser(authentication);
         log.setUser(user);
+        log.setDate(LocalDateTime.now());
         WellBeingLog newLog = logService.createLog(log);
 
         URI location = ServletUriComponentsBuilder

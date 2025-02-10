@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Well‑being Logs - Fitness App</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<header>
+    <h1>Fitness App</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/goals}">Goals</a></li>
+            <li><a th:href="@{/users}">Users</a></li>
+            <li><a th:href="@{/logs}">Well‑being Logs</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h2>Well‑being Logs</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Mental Health</th>
+            <th>Physical Health</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="log : ${logs}">
+            <td th:text="${log.id}">1</td>
+            <td th:text="${log.date}">2025-01-01</td>
+            <td th:text="${log.mentalHealthStatus}">Good</td>
+            <td th:text="${log.physicalHealthStatus}">Average</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/logs/new}">Create New Log</a>
+</main>
+
+<footer>
+    <p>&copy; 2025 Fitness App</p>
+</footer>
+</body>
+</html>

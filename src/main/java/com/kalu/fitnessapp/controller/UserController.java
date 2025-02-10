@@ -69,6 +69,7 @@ public class UserController {
         // Update user details (excluding password and roles for simplicity)
         existingUser.setFirstname(updateuser.getFirstname());
         existingUser.setLastname(updateuser.getLastname());
+        existingUser.setRoles(updateuser.getRoles());
 
         User savedUser = userService.updateUser(existingUser);
         return ResponseEntity.ok(savedUser);
